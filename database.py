@@ -106,7 +106,7 @@ def get_status(user_id):
 
 # sql.execute('CREATE TABLE users(user_id integer, name text, phone_number text, time_sub datetime, end_sub datetime, gender text, status text, amount_sub integer);')
 # sql.execute('CREATE TABLE paid(user_id integer, name text, phone_number text, time_sub datetime, end_sub datetime, gender text, status text, amount_sub integer);')
-# sql.execute('CREATE TABLE user_status(user_id integer, status integer);')
+sql.execute('CREATE TABLE user_status(user_id integer, status integer);')
 
 # def get_status(user_id):
 #     try:
