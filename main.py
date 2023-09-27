@@ -5,7 +5,6 @@ import config
 from settings import *
 import asyncio
 
-
 bot = Bot(config.TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
 logging.basicConfig(level=logging.INFO)
@@ -13,7 +12,6 @@ logging.basicConfig(level=logging.INFO)
 
 @dp.message_handler(commands=['start'])
 async def start_message(message):
-
     user_id = message.from_user.id
     checker = database.check_user(user_id)
 
@@ -28,10 +26,8 @@ async def start_message(message):
 
 
 async def broadcast_message(message_text):
-
     conn = sqlite3.connect('base.db')
     cursor = conn.cursor()
-
 
     cursor.execute('SELECT id FROM users')
     users = cursor.fetchall()
@@ -43,7 +39,6 @@ async def broadcast_message(message_text):
 
 @dp.message_handler(commands=['broadcast'])
 async def broadcast_command(message: types.Message):
-
     command_args = message.text.split(' ', maxsplit=1)
     if len(command_args) == 2:
         message_text = command_args[1]
@@ -78,11 +73,9 @@ async def get_number(message: types.Message, state=UserRegistration.getting_phon
     elif message.content_type == 'contact':
         user_answer = message.contact.phone_number
 
-
     await state.update_data(number=user_answer)
     await message.answer("Номер сохранил! Вы прошли регистрацию\n\nВыберите раздел.",
                          reply_markup=uzbtns.uz_main_menu_kb())
-
 
     all_info = await state.get_data()
     user_id = message.from_user.id
@@ -149,7 +142,6 @@ async def set_name(message):
 # Обработчик основного меню
 @dp.message_handler(content_types=["text"])
 async def main_menu(message):
-
     user_id = message.from_user.id
     user_answer = message.text
     photo_path = 'List_of_courses/course_photo.png'
@@ -176,10 +168,23 @@ async def main_menu(message):
                              reply_markup=uzcourse.uz_some_kb())
 
     elif user_answer == '🌟"Men ayolman" kursi':
-        await bot.send_message()
+
+        await message.answer('Мен аелман\n\n'
+                             'Курс вактинчалик тухтатилган\n\n'
+                             'Болаликдаги травмалар\n'
+                             'Онг ости блоклари билан,\n'
+                             'Установкалар билан,\n'
+                             'Ота она муносабатлари,\n'
+                             'Турмуш урток муносабати, хиенат мавзулари илдизи билан ишланади\n')
 
     elif user_answer == '🌟"Ruhiy rivojlanish" kursi':
-        await bot.send_message()
+
+        await message.answer('Рухий ривожланиш\n\n'
+                             'Курс вактинчалик тухтатилган\n\n'
+                             'Калб хотиржамлиги эришиш\n'
+                             'Калб касалликларидан халос булиш\n'
+                             'Калб касбини топиш\n'
+                             'Ичингиздаги яратувчи билан уланиш\n')
 
 
     elif user_answer == "Ortga qaytishh":
@@ -207,7 +212,6 @@ async def main_menu(message):
 @dp.callback_query_handler(lambda query: True)
 async def course_fivedays(call: types.CallbackQuery):
     user_id = call.from_user.id
-
 
     if call.data == "uz_start":
 
@@ -339,10 +343,10 @@ async def course_fivedays(call: types.CallbackQuery):
         current_status = database.get_status(user_id)
 
         if current_status == 3:
-
             await asyncio.sleep(5)
             await bot.send_chat_action(chat_id=user_id, action=types.ChatActions.TYPING)
-            await bot.send_message(call.from_user.id, day_three_notif_uz, reply_markup=uz_inline_buttons.uz_day_three_video())
+            await bot.send_message(call.from_user.id, day_three_notif_uz,
+                                   reply_markup=uz_inline_buttons.uz_day_three_video())
 
             await asyncio.sleep(3)
             await bot.send_message(call.from_user.id, day_three_message_uz,
@@ -379,7 +383,8 @@ async def course_fivedays(call: types.CallbackQuery):
 
         await bot.send_chat_action(chat_id=user_id, action=types.ChatActions.TYPING)
         await asyncio.sleep(2)
-        await bot.send_message(call.from_user.id, "Siz kursning to'rtinchi kuniga o'tdingiz!!!\nTez orada sizga habar yuboriladi! 🚀 🎓")
+        await bot.send_message(call.from_user.id,
+                               "Siz kursning to'rtinchi kuniga o'tdingiz!!!\nTez orada sizga habar yuboriladi! 🚀 🎓")
 
         # Ожидание 24 часа
         await asyncio.sleep(86400)
@@ -434,7 +439,6 @@ async def course_fivedays(call: types.CallbackQuery):
         current_status = database.get_status(user_id)
 
         if current_status == 5:
-
             await asyncio.sleep(3)
             await bot.send_chat_action(chat_id=user_id, action=types.ChatActions.TYPING)
             await bot.send_message(call.from_user.id, day_five_notif_uz)
@@ -461,9 +465,7 @@ async def course_fivedays(call: types.CallbackQuery):
         await bot.send_message(call.from_user.id, discount_text_uz)
 
 
-
-
-#https://www.youtube.com/channel/UCY9jGnDyqNCUUktm2ry-SFw
+# https://www.youtube.com/channel/UCY9jGnDyqNCUUktm2ry-SFw
 
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True)
