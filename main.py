@@ -26,10 +26,10 @@ async def start_message(message):
 
 
 async def broadcast_message(message_text):
-    conn = sqlite3.connect('base.db')
+    conn = sqlite3.connect('uzpsycho.db')
     cursor = conn.cursor()
 
-    cursor.execute('SELECT id FROM users')
+    cursor.execute('SELECT user_id FROM users')
     users = cursor.fetchall()
 
     for user in users:
