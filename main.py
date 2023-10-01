@@ -231,6 +231,9 @@ async def course_fivedays(call: types.CallbackQuery):
         await bot.send_message(call.from_user.id, text2_uz,
                                reply_markup=uzcourse.uz_info_course())
 
+        admin_id = 5928000362  # Замените на айди администратора
+        await bot.send_message(admin_id, f"Пользователь {call.from_user.first_name} начал курс")
+
 
     # При нажатии кнопку Продолжить
     elif call.data == "uz_next":
