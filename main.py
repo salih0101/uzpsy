@@ -1,3 +1,4 @@
+from aiogram.utils.exceptions import BotBlocked
 from states import Uz_Settings
 import sqlite3
 import types
@@ -16,11 +17,11 @@ async def start_message(message):
     checker = database.check_user(user_id)
 
     if checker:
-        await message.answer('Приветствуем вас в PsychoFemme \n\nВыберите раздел🔽',
+        await message.answer("Assalomu aleykum PsychoFemme ga Xush kelibsiz \n\nBo'limni tanlang🔽",
                              reply_markup=uzbtns.uz_main_menu_kb())
     else:
         await message.answer(
-            'Приветствую, Пройдите простую регистрацию чтобы в дальнейшем не было проблем!\n\nОтправьте Имя для регистрации!',
+            "Assalomu aleykum, Telegram botni ishlatishda muammo bo'lmasligi uchun ro'yhatdan o'ting'!\n\nIsmingizni yuboring!",
             reply_markup=uzbtns.ReplyKeyboardMarkup())
         await UserRegistration.getting_name_state.set()
 
@@ -32,9 +33,18 @@ async def broadcast_message(message_text):
     cursor.execute('SELECT user_id FROM users')
     users = cursor.fetchall()
 
+    # for user in users:
+    #     user_id = user[0]
+    #     await bot.send_message(chat_id=user_id, text=message_text)
     for user in users:
         user_id = user[0]
-        await bot.send_message(chat_id=user_id, text=message_text)
+        try:
+            await bot.send_message(chat_id=user_id, text=message_text)
+        except BotBlocked:
+            print(f"Пользователь {user_id} заблокировал бота.")
+        except Exception as e:
+            print(f"Ошибка при отправке сообщения пользователю {user_id}: {e}")
+
 
 
 @dp.message_handler(commands=['broadcast'])
@@ -53,7 +63,7 @@ async def get_name(message, state=UserRegistration.getting_name_state):
     user_answer = message.text
 
     await state.update_data(name=user_answer)
-    await message.answer("Имя сохранил!\n\nОтправьте номер телефона!",
+    await message.answer("Ro'yhatga olindi!\n\nEndi telefon raqamingizni yuboring!",
                          reply_markup=uzbtns.uz_phone_number_kb())
 
     await UserRegistration.getting_phone_number.set()
@@ -67,14 +77,14 @@ async def get_number(message: types.Message, state=UserRegistration.getting_phon
         user_answer = message.text
 
         if not user_answer.replace('+', '').isdigit():
-            await message.answer('Отправьте номер телефона')
+            await message.answer('Telefon raqamingizni yuboring')
             return
 
     elif message.content_type == 'contact':
         user_answer = message.contact.phone_number
 
     await state.update_data(number=user_answer)
-    await message.answer("Номер сохранил! Вы прошли регистрацию\n\nВыберите раздел.",
+    await message.answer("Telefon raqam ro'yhatga olindi! Siz to'liq ro'yhatdan o'tdingiz\n\nBo'limni tanlang.",
                          reply_markup=uzbtns.uz_main_menu_kb())
 
     all_info = await state.get_data()

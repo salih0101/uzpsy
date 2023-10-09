@@ -122,4 +122,5 @@ discount_text_uz = (f'Assalomu aleykum.\n'
                     f"Faqatgina Telegram botdagi 5 kunlik marafonni tamomlagan ishtirokchilarimiz uchun\n"
                     f'Kursning davomiyligi: 21 kun\n'
                     f'Nilufar Salimovna bilan 4 ta onlayn jonli dars va guruhga video darsliklar.\n'
+                    f"Ma'lumot uchun: @Sarvinoz_Alisherova\n"
                     f"Azizlarim sizlarni Yangi transformatsiyon kursimizda ko'rishda mamnun bo'laman")
